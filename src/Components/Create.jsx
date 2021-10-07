@@ -88,6 +88,12 @@ export default function Create() {
         let { data } = await axios.post("http://localhost:3001/students", form);
         console.log(data);
         setDetails(data.item);
+        setForm({
+          name: "",
+          city: "",
+          age: "",
+          gender: "male",
+        });
       } catch (e) {
         console.log(e);
       }
@@ -97,14 +103,16 @@ export default function Create() {
   return (
     <div className={classes.root}>
       <div className={classes.CreatePage}>
+        <h2>Create Profile</h2>
         <div className={classes.input}>
           <TextField
             id="outlined-basic"
             label="Name"
             variant="outlined"
-            onKeyUp={onEnter}
+            onChange={onEnter}
             name="name"
             required
+            value={form.name}
             error={error.name}
             helperText={error.name}
           />
@@ -114,9 +122,10 @@ export default function Create() {
             id="outlined-basic"
             label="City"
             variant="outlined"
-            onKeyUp={onEnter}
+            onChange={onEnter}
             name="city"
             required
+            value={form.city}
             error={error.city}
             helperText={error.city}
           />
@@ -128,8 +137,9 @@ export default function Create() {
             label="Age"
             type="number"
             variant="outlined"
-            onKeyUp={onEnter}
+            onChange={onEnter}
             name="age"
+            value={form.age}
             required
             error={error.age}
             helperText={error.age}

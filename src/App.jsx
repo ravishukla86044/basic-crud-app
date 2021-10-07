@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Switch, Route } from "react-router-dom";
 import Edit from "./Components/Edit";
 import Create from "./Components/Create";
+import StudentList from "./Components/StudentList";
 
 function App() {
   const [page, setPage] = useState(1);
@@ -14,7 +15,7 @@ function App() {
       <Header />
       <Switch>
         <Route exact path="/">
-          <Bottom page={page} setPage={setPage} />
+          <StudentList page={page} setPage={setPage} />
         </Route>
         <Route path="/edit/:id">
           <Edit />
