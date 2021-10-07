@@ -1,8 +1,10 @@
-import logo from "./logo.svg";
 import "./App.css";
 import Header from "./Components/Header";
 import Bottom from "./Components/Bottom";
 import { useState } from "react";
+import { Switch, Route } from "react-router-dom";
+import Edit from "./Components/Edit";
+import Create from "./Components/Create";
 
 function App() {
   const [page, setPage] = useState(1);
@@ -10,7 +12,17 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <Bottom page={page} setPage={setPage} />
+      <Switch>
+        <Route exact path="/">
+          <Bottom page={page} setPage={setPage} />
+        </Route>
+        <Route path="/edit/:id">
+          <Edit />
+        </Route>
+        <Route path="/create">
+          <Create />
+        </Route>
+      </Switch>
     </div>
   );
 }

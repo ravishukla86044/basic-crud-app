@@ -20,8 +20,9 @@ export default function Bottom({ page, setPage }) {
         count={10}
         variant="outlined"
         page={page}
-        onChange={(e) => {
-          setPage(e.value);
+        onChange={(event, value) => {
+          console.log(value);
+          setPage(value);
         }}
       />
     </div>
