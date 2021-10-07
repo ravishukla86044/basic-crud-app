@@ -10,7 +10,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Loading from "./Loading";
 import axios from "axios";
-import { useHistory } from "react-router";
+import { useHistory, useLocation } from "react-router";
 
 const useStyles = makeStyles({
   root: {},
@@ -30,20 +30,56 @@ const useStyles = makeStyles({
   },
 });
 
-export default function StudentList({ page, setPage }) {
+export default function StudentList({ pagination, setPage, sorting, filtering }) {
   const classes = useStyles();
   const history = useHistory();
-  const [isLoading, setLoading] = useState(false);
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
 
+  const page = searchParams.get("page") || 1;
+  const sort = searchParams.get("sort") || "";
+  const filter = searchParams.get("filter") || "";
   const [data, setData] = useState([]);
+  const [isLoading, setLoading] = useState(false);
+  const [totalPages, setTotalPages] = useState(10);
+
   useEffect(() => {
+    console.log(sort, page, filter);
     getData();
-  }, [page]);
+  }, [page, sort]);
+
+  useEffect(() => {
+    console.log("inside filtereuseEffet");
+    getFilterData();
+  }, [filter]);
+
+  //   useEffect(() => {
+  //     console.log("inside sortuseEffet");
+  //     getData();
+  //   }, [sort]);
 
   async function getData() {
-    let { data } = await axios.get(`http://localhost:3001/students`);
+    if (sort === "age") {
+      var { data } = await axios.get(`http://localhost:3001/students?page=${page}&sort=age`);
+    } else {
+      var { data } = await axios.get(`http://localhost:3001/students?page=${page}`);
+    }
+
     console.log(data.item);
     setData(data.item);
+    setTotalPages(data.totalPages);
+  }
+
+  async function getFilterData() {
+    console.log(filter, "inside getData");
+    if (filter !== "") {
+      var { data } = await axios.get(
+        `http://localhost:3001/students?page=${page}&sort=age&filter=${filter}`
+      );
+      console.log(data.item);
+      setData(data.item);
+      setTotalPages(data.totalPages);
+    }
   }
 
   const handelEdit = (item) => {
@@ -120,7 +156,6 @@ export default function StudentList({ page, setPage }) {
           </TableBody>
         </Table>
       </TableContainer>
-      <Bottom page={page} setPage={setPage} />
     </div>
   );
 }

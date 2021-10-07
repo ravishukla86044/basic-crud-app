@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Pagination from "@material-ui/lab/Pagination";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -10,19 +11,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Bottom({ page, setPage }) {
+export default function Bottom({ pagination, setPage, totalPages, sort }) {
   const classes = useStyles();
+  const history = useHistory();
 
   return (
     <div className={classes.root}>
       <Pagination
         color="primary"
-        count={10}
+        count={totalPages || 10}
         variant="outlined"
-        page={page}
+        page={pagination}
         onChange={(event, value) => {
           console.log(value);
           setPage(value);
+          if (sort !== "") {
+            history.push(`/?page=${value}&sort=${sort}`);
+          } else {
+            history.push(`/?page=${value}`);
+          }
         }}
       />
     </div>
